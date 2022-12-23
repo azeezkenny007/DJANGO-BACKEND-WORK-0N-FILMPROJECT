@@ -32,10 +32,13 @@ def view2(request):
         if form.is_valid():
             form.save()
             return redirect(view1)
+        else:
+            messages.add_message(request,messages.ERROR,"your credentials is wrong")
 
 
     kate={'form':form}
     return render(request,'account/signup.html',context=kate)
+
 def man(request):
-    logout(request)
+    logout(request) 
     return redirect(view1)
