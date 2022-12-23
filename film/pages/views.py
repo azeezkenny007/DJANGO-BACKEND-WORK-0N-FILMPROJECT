@@ -1,5 +1,8 @@
 
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.db.models import F,Q
+from django.utils import timezone
 
 # Create your views here.
 from .decorators import *
@@ -73,4 +76,14 @@ def index2(request):
     return render(request,'pages/index2.html')
 def pricing(request):
     return render(request,'pages/pricing.html')
+
+def new(request):
+    context = {"image": Episode.episode_name }
+    
+def addNew(request):
+    user = User.objects.get(id=1)
+    group = user.group_set.all()
+    print(group,"🐛")
+    return HttpResponse("<body>hello world</body>")
+
 
