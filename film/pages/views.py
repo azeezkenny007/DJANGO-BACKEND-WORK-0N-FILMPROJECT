@@ -81,9 +81,17 @@ def new(request):
     context = {"image": Episode.episode_name }
     
 def addNew(request):
+    # get the first user
     user = User.objects.get(id=1)
+    #get the all groups that exists in
     group = user.group_set.all()
+    make = User.objects.filter(name__icontains="kenny")
+    # get the query set that name field contains kenny OR lade
+    #       1. the querysearch is case - insensitive
+    fade = Group.objects.filter(Q(name__icontains="kenny") & Q(name__icontains="lade"))
     print(group,"🐛")
+    print(make,"👩‍🍳")
+    print(fade,'🐵')
     return HttpResponse("<body>hello world everyone</body>")
 
 
