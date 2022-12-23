@@ -84,6 +84,6 @@ def addNew(request):
     user = User.objects.get(id=1)
     group = user.group_set.all()
     print(group,"🐛")
-    return HttpResponse("<body>hello world</body>")
+    return HttpResponse("<body>hello world everyone</body>")
 
 
