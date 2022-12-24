@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import F,Q
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from .decorators import *
@@ -19,6 +20,7 @@ def catalog1(request):
     film=Film.objects.all()
     cartoons=Film.objects.filter(category__name='cartoons')
     movies=Film.objects.filter(category__name='movies')
+    
 
     p=Paginator(film,2)
     page_num=request.GET.get('page')
@@ -79,19 +81,22 @@ def pricing(request):
 
 def new(request):
     context = {"image": Episode.episode_name }
-    
+ 
+
 def addNew(request):
     # get the first user
     user = User.objects.get(id=1)
     #get the all groups that exists in
     group = user.group_set.all()
     make = User.objects.filter(name__icontains="kenny")
+    first = User.objects.first()
     # get the query set that name field contains kenny OR lade
     #       1. the querysearch is case - insensitive
     fade = Group.objects.filter(Q(name__icontains="kenny") & Q(name__icontains="lade"))
     print(group,"🐛")
     print(make,"👩‍🍳")
     print(fade,'🐵')
-    return HttpResponse("<body>hello world everyone</body>")
+    print(first,'💫')
+    return HttpResponse("<strong>hello world everyone</strong>")
 
 

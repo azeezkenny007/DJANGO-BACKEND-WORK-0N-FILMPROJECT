@@ -33,6 +33,7 @@ def view2(request):
             form.save()
             return redirect(view1)
         else:
+            f = ContactForm()
             messages.add_message(request,messages.ERROR,"your credentials is wrong")
 
 

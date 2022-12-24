@@ -1,4 +1,5 @@
 from django.db import models
+import datetime 
 
 # Create your models here.
 
@@ -68,6 +69,7 @@ class User(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=255)
+    joined_group_date = models.DateField(default=datetime.date.today(),null=True,blank=True)
     users = models.ManyToManyField(User)
 
     def __str__(self):
