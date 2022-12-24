@@ -13,6 +13,10 @@ from django.http import HttpResponse
 
 def set_cookie_view(request):
     response = HttpResponse('Cookie set')
+    # set_cookie takes in a(name,value,max_age)
+    # name = name of the cookie
+    # value = value of the cookie
+    # max_age = how many seconds for the cookie to last
     response.set_cookie('favorite_color', 'blue', max_age=30)
     return response
 
