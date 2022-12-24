@@ -1,4 +1,4 @@
-from django.contrib import *
+from django.contrib import messages
 # views.py
 from django.shortcuts import render, redirect
 from .forms import ContactForm
