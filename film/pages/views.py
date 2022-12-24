@@ -61,7 +61,7 @@ def faq(request):
     return render(request,'pages/faq.html')
 
 
-@ authenticate
+@ custom_login_required
 def index(request):
     film=Film.objects.all()
     cartoons=Film.objects.filter(category__name='cartoons')

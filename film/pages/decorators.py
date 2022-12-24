@@ -22,7 +22,7 @@ def custom_login_required(view_func):
         if is_authenticated(request.user):
             return view_func(request, *args, **kwargs)
         else:
-            return redirect('login')
+            return redirect('signin')
     return wrapper_func
 
 @custom_login_required
