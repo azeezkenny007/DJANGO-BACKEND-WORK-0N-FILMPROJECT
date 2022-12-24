@@ -4,7 +4,6 @@ from django.http import HttpResponse
 from django.db.models import F,Q
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-
 # Create your views here.
 from .decorators import *
 from .models import *
