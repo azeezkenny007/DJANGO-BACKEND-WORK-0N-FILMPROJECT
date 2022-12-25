@@ -1,6 +1,6 @@
 # forms.py
 from django.forms import ModelForm
-from .models import Contact
+from .models import Contact,Attendance
 from django.contrib import messages
 
 
@@ -12,3 +12,12 @@ class ContactForm(ModelForm):
     class Meta:
         model = Contact
         fields = ['name', 'email', 'message']
+        
+
+
+
+class AttendanceForm(ModelForm):
+    class Meta:
+        model = Attendance
+        fields = ['course', 'student']
+
