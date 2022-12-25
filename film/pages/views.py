@@ -55,6 +55,7 @@ def details2(request,id):
         dic["episode"]=season.episode_set.all()
         allseasons.append(dic)
     print(allseasons)
+    print(seasons,"❗❗")
 
     return render(request,'pages/details2.html',{'series':series,'episode':episode,"you":allseasons})
 def faq(request):
@@ -92,6 +93,7 @@ def addNew(request):
     # get the query set that name field contains kenny OR lade
     #       1. the querysearch is case - insensitive
     fade = Group.objects.filter(Q(name__icontains="kenny") & Q(name__icontains="lade"))
+    print(user,"🎛")
     print(group,"🐛")
     print(make,"👩‍🍳")
     print(fade,'🐵')
