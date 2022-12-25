@@ -30,4 +30,6 @@ path('index/',index,name='index'),
 path('index2/',index2,name='index2'),
 path('pricing/',pricing,name='pricing'),
 path('http/',addNew,name='http'),
+path('attend/',sign_attendance,name='attend'),
+path('signed/',attendance_signed,name='signed'),
 ]
