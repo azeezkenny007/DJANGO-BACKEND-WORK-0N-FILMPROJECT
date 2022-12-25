@@ -82,3 +82,10 @@ class Contact(models.Model):
     email = models.EmailField()
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
+
+
+class Attendance(models.Model):
+    course = models.CharField(max_length=255)
+    student = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
