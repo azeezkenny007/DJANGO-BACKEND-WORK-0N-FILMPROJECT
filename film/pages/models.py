@@ -89,3 +89,6 @@ class Attendance(models.Model):
     course = models.CharField(max_length=255)
     student = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.course} {self.student}'
