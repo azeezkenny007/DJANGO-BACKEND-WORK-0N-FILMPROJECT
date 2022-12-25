@@ -1,11 +1,15 @@
-{% extends 'pages/base.html' %}
+{% comment %} {% extends 'pages/base.html' %} {% endcomment %}
 {% block content %}
 {% load static %}
 
 <form method="post">
  {% csrf_token %}
- {{ form.as_p }}
+     <h1>{{ form.student }}</h1>
+     <h1>{{ form.course }}</h1>
  <button type="submit">Sign attendance</button>
+  {% if messages %}
+      <h1>{messages}</h1>
+  {% endif %}
 </form>
 
 {% endblock %}
