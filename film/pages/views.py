@@ -109,7 +109,7 @@ def sign_attendance(request):
         if form.is_valid():
             form.save()
             messages.add_message(request,messages.INFO,"your registration was successful!!!")
-            return redirect()
+            return redirect(attendance_signed)
             
     else:
         form = AttendanceForm()
