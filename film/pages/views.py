@@ -100,4 +100,23 @@ def addNew(request):
     print(first,'💫')
     return HttpResponse("<strong>hello world everyone</strong>")
 
+from django.shortcuts import render, redirect
+from .forms import AttendanceForm
+
+def sign_attendance(request):
+    if request.method == 'POST':
+        form = AttendanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request,messages.INFO,"your registration was successful!!!")
+            return redirect()
+            
+    else:
+        form = AttendanceForm()
+    return render(request, 'pages/attendance.html', {'form': form})
+
+def attendance_signed(request):
+    return HttpResponse("<bold>You have been successfully redireceted</bold>")
+
+
 
