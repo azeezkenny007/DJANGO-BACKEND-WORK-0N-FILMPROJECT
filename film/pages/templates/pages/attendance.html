@@ -2,14 +2,21 @@
 {% block content %}
 {% load static %}
 
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
 <form method="post">
  {% csrf_token %}
      <h1>{{ form.student }}</h1>
      <h1>{{ form.course }}</h1>
  <button type="submit">Sign attendance</button>
-  {% if messages %}
-      <h1>{messages}</h1>
-  {% endif %}
+  
 </form>
 
 {% endblock %}
