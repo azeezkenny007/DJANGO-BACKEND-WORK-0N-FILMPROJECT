@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from .forms import AttendanceForm
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.db.models import F, Q
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -141,7 +141,8 @@ def serial(request):
     group =Group.objects.all()
     data  = serializers.serialize("json",group)
     print(data,"👼🏿")
-    return HttpResponse("<bold>You have been successfully redireceted</bold>")
+    # return HttpResponse("<bold>You have been successfully redireceted</bold>")
+    return JsonResponse(data,safe=False)
 
 
 
