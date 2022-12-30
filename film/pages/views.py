@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from .decorators import *
 from .models import *
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core import serializers
 
 # Create your views here.
 
@@ -137,4 +138,10 @@ def attendance_signed(request):
 
 
 def serial(request):
+    group =Group.objects.all()
+    data  = serializers.serialize("json",group)
+    print(data,"👼🏿")
     return HttpResponse("<bold>You have been successfully redireceted</bold>")
+
+
+
