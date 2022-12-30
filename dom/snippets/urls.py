@@ -19,6 +19,6 @@ from .views import *
 
 urlpatterns = [
     path('',snippet_list,name="snippets"),
-    path('snippet<int:pk>/',snippet_detail,name="snippetsDetails"),
+    path('<int:pk>',snippet_detail,name="snippetsDetails"),
       
 ]
