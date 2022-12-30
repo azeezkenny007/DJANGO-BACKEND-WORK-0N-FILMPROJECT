@@ -1,6 +1,7 @@
 
 from django.shortcuts import render, redirect
 from .forms import AttendanceForm
+from rest_framework import views
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import F, Q
