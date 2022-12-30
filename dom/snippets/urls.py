@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from .views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-       path('account/',include('account.urls')),
-     path('pages/',include('pages.urls'))
+    path('snippets/',snippet_list,name="snippets"),
+    path('snippet<int:pk>/',snippet_detail,name="snippetsDetails"),
+      
 ]
