@@ -63,6 +63,9 @@ def snippet_detail(request, pk,format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 def Attend(request):
+    student = Student.objects.get(id=1)
+    attend= student.attendance_set.all()
+    print(attend,"🎅")
     attendance = Attendance.objects.filter(id__gte=1)
     print(attendance)
     data = serializers.serialize("json",attendance)
