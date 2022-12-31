@@ -62,8 +62,9 @@ def snippet_detail(request, pk,format=None):
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-def Attendance(request):
-    attendance = Attendance.
+def Attend(request):
+    attendance = Attendance.objects.filter(student__name="azeez")
+    print(attendance)
     data = serializers.serialize()
 
    
