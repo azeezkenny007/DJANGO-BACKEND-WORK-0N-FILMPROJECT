@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+
 from django.views.decorators.csrf import csrf_exempt
+# This is used to make an HTTP Post request which can be consumed with axios
 from rest_framework.parsers import JSONParser
 from snippets.models import Snippet
+# This converts our data from the models to any type of data needed
 from snippets.serializers import SnippetSerializer
+# This replaces the statically typed error or success statically type handlers 
 from rest_framework import status
+# The import help to ensure concise usage of the api_view
 from rest_framework.decorators import api_view
 
 
