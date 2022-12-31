@@ -48,6 +48,7 @@ class Attendance(models.Model):
     present = models.BooleanField(default=True)
     
     class Meta:
+        # The unique_together meta flag
         # This means the student and date field cannot have the same value in the database
         # e.g  {student :"azeez",date:"2022/31/12"} and another instance like this {student :"azeez",date:"2022/31/12"} will ❌(fail)
         # e.g  {student :"azeez",date:"2022/31/12"} and another instance like this {student :"lade",date:"2022/31/12"} will ✅(pass)
