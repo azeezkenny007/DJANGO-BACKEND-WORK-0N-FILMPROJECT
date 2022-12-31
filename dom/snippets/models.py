@@ -48,6 +48,10 @@ class Attendance(models.Model):
     present = models.BooleanField(default=True)
     
     class Meta:
+        # This means the student and date field cannot have the same value in the database
+        # e.g  {student :"azeez",date:"2022/31/12"} and another instance like this {student :"azeez",date:"2022/31/12"} will ❌(fail)
+        # e.g  {student :"azeez",date:"2022/31/12"} and another instance like this {student :"lade",date:"2022/31/12"} will ✅(pass)
+         
         unique_together = ('student', 'date')
         
     def __str__(self):
