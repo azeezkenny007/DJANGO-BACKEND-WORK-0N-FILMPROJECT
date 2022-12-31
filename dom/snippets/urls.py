@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from .views import *
-from rest_framework.urlpatterns import apply_suffix_patterns
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('',snippet_list,name="snippets"),
     path('<int:pk>',snippet_detail,name="snippetsDetails"),
       
 ]
+
+
+urlpatterns = format_suffix_patterns(urlpatterns)
