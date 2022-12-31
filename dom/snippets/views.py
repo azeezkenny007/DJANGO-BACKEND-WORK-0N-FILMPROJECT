@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.core import serializers
+from .models import *
 
 from django.views.decorators.csrf import csrf_exempt
 # This is used to make an HTTP Post request which can be consumed with axios
@@ -59,5 +61,9 @@ def snippet_detail(request, pk,format=None):
     elif request.method == 'DELETE':
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+def Attendance(request):
+    attendance = Attendance.
+    data = serializers.serialize()
 
    
