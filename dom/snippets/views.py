@@ -11,6 +11,8 @@ from snippets.serializers import SnippetSerializer
 from rest_framework import status
 # The import help to ensure concise usage of the api_view
 from rest_framework.decorators import api_view
+# This import is an extension of the HTTPResponse , but it allows to define in a way that is wanted
+from rest_framework.response import Response
 
 
 # Create your views here.
