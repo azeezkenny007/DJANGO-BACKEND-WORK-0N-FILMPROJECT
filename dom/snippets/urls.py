@@ -21,6 +21,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 urlpatterns = [
     path('',snippet_list,name="snippets"),
     path('<int:pk>',snippet_detail,name="snippetsDetails"),
+    path('a',Attend,name="attend"),
       
 ]
 
