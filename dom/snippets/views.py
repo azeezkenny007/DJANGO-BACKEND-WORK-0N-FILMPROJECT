@@ -5,6 +5,8 @@ from rest_framework.parsers import JSONParser
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from rest_framework import status
+from rest_framework.decorators import api_view
+
 
 # Create your views here.
 
