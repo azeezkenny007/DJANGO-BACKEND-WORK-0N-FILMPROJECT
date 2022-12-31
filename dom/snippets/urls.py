@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from .views import *
+from rest_framework.urlpatterns import apply_suffix_patterns
 
 urlpatterns = [
     path('',snippet_list,name="snippets"),
