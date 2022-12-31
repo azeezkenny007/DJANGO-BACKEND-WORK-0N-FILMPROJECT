@@ -11,6 +11,9 @@ STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
 class NameCategory(models.Model):
     category = models.CharField(max_length=200)
     name = models.CharField(max_length=300)
+    
+    def __str__(self):
+        return f'{self.category}'
 
 
 class Snippet(models.Model):
