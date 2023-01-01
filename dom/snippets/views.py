@@ -71,4 +71,3 @@ def Attend(request):
     data = serializers.serialize("json",attendance)
     return JsonResponse(data,safe=False)
 
-   
