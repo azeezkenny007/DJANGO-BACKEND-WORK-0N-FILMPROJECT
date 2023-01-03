@@ -22,6 +22,8 @@ urlpatterns = [
     path('',snippet_list,name="snippets"),
     path('<int:pk>',snippet_detail,name="snippetsDetails"),
     path('a',Attend,name="attend"),
+    path('p',SnippetList.as_view(),name="attend"),
+    
       
 ]
 
