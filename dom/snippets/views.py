@@ -2,6 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from .models import *
+from snippets.models import Snippet
+from snippets.serializers import SnippetSerializer
+from rest_framework import generics
+
 
 from django.views.decorators.csrf import csrf_exempt
 # This is used to make an HTTP Post request which can be consumed with axios
@@ -72,3 +76,13 @@ def Attend(request):
     data = serializers.serialize("json",attendance)
     return JsonResponse(data,safe=False)
 
+
+
+class SnippetList(generics.ListCreateAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+
+class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
