@@ -25,7 +25,7 @@ urlpatterns = [
     path('p',SnippetList.as_view(),name="attend"),
     path('p<int:pk>',SnippetDetail.as_view(),name="attend"), 
     path('t/',TodoGetAndPost.as_view(),name="GetPost"), 
-    path('t<int:pk>',SnippetDetail.as_view(),name="attend"), 
+    path('t/<int:pk>',TodoGetPutDelete.as_view(),name="attend"), 
 ]
 
 
