@@ -77,8 +77,6 @@ def Attend(request):
     return JsonResponse(data,safe=False)
 
 
-
-
 class SnippetList(generics.ListCreateAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
