@@ -64,3 +64,6 @@ class Todo(models.Model):
     name = models.CharField(max_length=400)
     desription = models.TextField()
     is_present = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.name}"
