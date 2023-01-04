@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from snippets.models import Snippet
 # This converts our data from the models to any type of data needed
-from snippets.serializers import SnippetSerializer
+from snippets.serializers import SnippetSerializer,TodoSerializer
 # This replaces the statically typed error or success statically type handlers 
 from rest_framework import status
 # The import help to ensure concise usage of the api_view
@@ -84,3 +84,12 @@ class SnippetList(generics.ListCreateAPIView):
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+
+
+class TodoGetAndPost(generics.ListCreateAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
+
+class TodoGetPutDelete(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
