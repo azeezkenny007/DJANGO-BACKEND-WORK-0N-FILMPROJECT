@@ -20,3 +20,8 @@ class MyTest(TestCase):
     def test_if_endpoint_correct(self):
         response = self.client.get('/pages/index2/')
         self.assertEqual(response.status_code, 200)
+        
+    def test_if_reverse_endpoint_correct(self):
+        response = self.client.get(reverse('index2'))
+        self.assertEqual(response.status_code, 200)
+  

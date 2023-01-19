@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'account',
     'pages',
-    "snippets"
+    "snippets",
+    "Vote"
 ]
 
 MIDDLEWARE = [
