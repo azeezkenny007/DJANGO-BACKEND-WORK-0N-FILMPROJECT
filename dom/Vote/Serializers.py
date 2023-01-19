@@ -11,3 +11,6 @@ class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ('id', 'name', 'position', 'votes')
+        extra_kwargs = {
+            "votes": {"write_only": True}
+        }

@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from .views import VoteView
 
 urlpatterns = [
-    #  path('admin/', ""),
+     path('voter/', VoteView.as_view(),name="vote"),
      
 ]
