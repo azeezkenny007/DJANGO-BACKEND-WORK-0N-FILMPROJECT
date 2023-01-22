@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Categorie, User, Group, Film
+from .models import Categorie, User, Group, Film, Season,Contact
 
 # Create your tests here.
 
@@ -103,7 +103,7 @@ class MyTest(TestCase):
 
     def test_if_data_in_film_model_is_correct(self):
         movies_choices = (('Action', 'Action'), ('Horror', 'horror'),
-                  ('Thriller', 'Thriller'))
+                          ('Thriller', 'Thriller'))
         category = Categorie.objects.create(name="favorite")
         main_film = Film.objects.create(
             category=category,
@@ -121,13 +121,46 @@ class MyTest(TestCase):
         )
 
         film = Film.objects.get(id=1)
+        season = Season.objects.create(
+            film=main_film, description="The man at the shop is crazy", season_number=2)
         category = film._meta.get_field("category").verbose_name
         category_length = film._meta.get_field("category").max_length
         tags = film._meta.get_field("tags").verbose_name
         tags_length = film._meta.get_field("tags").max_length
-        tags_choices =film._meta.get_field("tags").choices
-        self.assertEqual(category_length,None)
-        self.assertEqual(category,"category")
-        self.assertEqual(tags,"tags")
-        self.assertEqual(tags_length,20)
-        self.assertEqual(tags_choices,movies_choices)
+        tags_choices = film._meta.get_field("tags").choices
+        self.assertEqual(category_length, None)
+        season_film = season._meta.get_field("film").verbose_name
+        season_description = season._meta.get_field("description").verbose_name
+        season_season_number = season._meta.get_field("season_number").verbose_name
+        season_season_number_max_length = season._meta.get_field("season_number").max_length
+        self.assertEqual(season_season_number_max_length,200)
+        self.assertEqual(season_season_number,"season number")
+        self.assertEqual(season_description,"description")
+        self.assertEqual(season_film,"film")
+        self.assertEqual(category, "category")
+        self.assertEqual(tags, "tags")
+        self.assertEqual(tags_length, 20)
+        self.assertEqual(tags_choices, movies_choices)
+
+    def test_if_the_model_Attendance_is_working_correctly(self):
+        contactCreate = Contact.objects.create(name="azeez",email="azeezokhamena@gmail.com",message="This form was submitted",created_at="12/12/2021")
+        contact = Contact.objects.get(id=1)
+        contact_name = contact._meta.get_field("name").verbose_name
+        contact_name_max_length = contact._meta.get_field("name").max_length
+        contact_email =contact._meta.get_field("email").verbose_name
+        contact_message = contact._meta.get_field("message").verbose_name
+        contact_creattion_time = contact._meta.get_field("created_at").verbose_name
+        self.assertEqual(contact_name,"name")
+        self.assertEqual(contact_email,"email")
+        self.assertEqual(contact_message,"message")
+        self.assertEqual(contact_creattion_time,"created at")
+        self.assertEqual(contact_name_max_length,255)
+        
+    
+    def test_if_field_is_correct(self):
+         contactCreate = Contact.objects.create(name="azeez",email="azeezokhamena@gmail.com",message="This form was submitted",created_at="12/12/2021")
+         contact = Contact.objects.get(id=1)
+         contact_name_charField = contact._meta.get_field("name").get_internal_type()
+         self.assertEqual(contact_name_charField,"CharField")
+         
+    if isinstance()
