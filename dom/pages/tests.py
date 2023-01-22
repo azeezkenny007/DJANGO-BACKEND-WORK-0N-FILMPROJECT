@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Categorie, User, Group, Film, Season,Contact
+from .models import Categorie, User, Group, Film, Season,Contact,MyModel
 
 # Create your tests here.
 
@@ -169,3 +169,27 @@ class MyTest(TestCase):
         self.assertEqual(contactCreate.email,"azeezokhamena@gmail.com")
         self.assertEqual(contactCreate.message,"This form was submitted")
         self.assertTrue(contactCreate.created_at.strftime("%x") == "01/22/23")
+        
+    def test_if_values_used_in_model_Mymodel_model_is_correct(self):
+        my_model_create = MyModel.objects.create(name="kenny",description="The man at field",created_at="01/22/23",updated_at="01/22/23")
+        model = MyModel.objects.get(id=1)
+        name_field_name = model._meta.get_field("name").verbose_name
+        name_field_length = model._meta.get_field("name").max_length
+        description_field_name = model._meta.get_field("description").verbose_name
+        name_is_CharField=model._meta.get_field("name").get_internal_type()
+        description_is_TextField = model._meta.get_field("description").get_internal_type()
+        created_at_DateTimeField = model._meta.get_field("created_at").get_internal_type()
+        updated_at_DateTimeField =model._meta.get_field("updated_at").get_internal_type()
+        self.assertEqual(model.name,"kenny")
+        self.assertEqual(model.description,"The man at field")
+        self.assertEqual(model.created_at.strftime("%x"),"01/22/23")
+        self.assertTrue(model.updated_at.strftime("%x") == "01/22/23")
+        self.assertEqual(description_field_name,"description")
+        self.assertEqual(name_field_length,255)
+        self.assertEqual(name_field_name,"name")
+        self.assertEqual(name_is_CharField,"CharField")
+        self.assertEqual(description_is_TextField,"TextField")
+        self.assertEqual(created_at_DateTimeField,"DateTimeField")
+        self.assertTrue(updated_at_DateTimeField,"DateTimeField")
+       
+        
