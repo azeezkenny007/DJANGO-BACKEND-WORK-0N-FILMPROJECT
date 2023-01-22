@@ -180,6 +180,7 @@ class MyTest(TestCase):
         description_is_TextField = model._meta.get_field("description").get_internal_type()
         created_at_DateTimeField = model._meta.get_field("created_at").get_internal_type()
         updated_at_DateTimeField =model._meta.get_field("updated_at").get_internal_type()
+        update_at_auto_add_now=model._meta.get_field("update_at")
         self.assertEqual(model.name,"kenny")
         self.assertEqual(model.description,"The man at field")
         self.assertEqual(model.created_at.strftime("%x"),"01/22/23")
