@@ -163,4 +163,9 @@ class MyTest(TestCase):
          contact_name_charField = contact._meta.get_field("name").get_internal_type()
          self.assertEqual(contact_name_charField,"CharField")
          
-    if isinstance()
+    def test_if_values_used_in_contact_model_is_correct(self):
+        contactCreate = Contact.objects.create(name="azeez",email="azeezokhamena@gmail.com",message="This form was submitted",created_at="01/22/23")
+        self.assertEqual(contactCreate.name,"azeez")
+        self.assertEqual(contactCreate.email,"azeezokhamena@gmail.com")
+        self.assertEqual(contactCreate.message,"This form was submitted")
+        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/22/23")
