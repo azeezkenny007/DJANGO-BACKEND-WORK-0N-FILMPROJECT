@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Categorie, User, Group, Film, Season,Contact,MyModel
+from .models import Categorie, User, Group, Film, Season,Contact,MyModel,Attendance
+import datetime
+from dateutil import parser
 
 # Create your tests here.
 
@@ -164,14 +166,14 @@ class MyTest(TestCase):
          self.assertEqual(contact_name_charField,"CharField")
          
     def test_if_values_used_in_contact_model_is_correct(self):
-        contactCreate = Contact.objects.create(name="azeez",email="azeezokhamena@gmail.com",message="This form was submitted",created_at="01/22/23")
+        contactCreate = Contact.objects.create(name="azeez",email="azeezokhamena@gmail.com",message="This form was submitted",created_at="01/23/23")
         self.assertEqual(contactCreate.name,"azeez")
         self.assertEqual(contactCreate.email,"azeezokhamena@gmail.com")
         self.assertEqual(contactCreate.message,"This form was submitted")
-        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/22/23")
+        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/23/23")
         
     def test_if_values_used_in_model_Mymodel_model_is_correct(self):
-        my_model_create = MyModel.objects.create(name="kenny",description="The man at field",created_at="01/22/23",updated_at="01/22/23")
+        my_model_create = MyModel.objects.create(name="kenny",description="The man at field",created_at="01/23/23",updated_at="01/23/23")
         model = MyModel.objects.get(id=1)
         name_field_name = model._meta.get_field("name").verbose_name
         name_field_length = model._meta.get_field("name").max_length
@@ -180,11 +182,11 @@ class MyTest(TestCase):
         description_is_TextField = model._meta.get_field("description").get_internal_type()
         created_at_DateTimeField = model._meta.get_field("created_at").get_internal_type()
         updated_at_DateTimeField =model._meta.get_field("updated_at").get_internal_type()
-        update_at_auto_add_now=model._meta.get_field("update_at")
+        updated_at_auto_add_now=model._meta.get_field("updated_at")
         self.assertEqual(model.name,"kenny")
         self.assertEqual(model.description,"The man at field")
-        self.assertEqual(model.created_at.strftime("%x"),"01/22/23")
-        self.assertTrue(model.updated_at.strftime("%x") == "01/22/23")
+        self.assertEqual(model.created_at.strftime("%x"),"01/23/23")
+        self.assertTrue(model.updated_at.strftime("%x") == "01/23/23")
         self.assertEqual(description_field_name,"description")
         self.assertEqual(name_field_length,255)
         self.assertEqual(name_field_name,"name")
@@ -192,5 +194,17 @@ class MyTest(TestCase):
         self.assertEqual(description_is_TextField,"TextField")
         self.assertEqual(created_at_DateTimeField,"DateTimeField")
         self.assertTrue(updated_at_DateTimeField,"DateTimeField")
+        
+    def test_if_redirect_is_working(self):
+        form_data ={"course":"MEE322","student":"okhamena azeez","timestamp":"23/01/23"}
+          # Convert timestamp string to datetime object
+        timestamp = parser.parse(form_data['timestamp'])
+        # Convert datetime object to desired format
+        form_data['timestamp'] = timestamp.strftime('%Y-%m-%d')
+        form_model=Attendance(**form_data)
+        form_model.full_clean()
+        form_model.save()
+        response = self.client.post("/pages/attend/",data =form_data)
+        self.assertRedirects(response,"/pages/signed/")
        
         
