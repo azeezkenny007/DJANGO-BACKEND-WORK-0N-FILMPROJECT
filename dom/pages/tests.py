@@ -197,10 +197,10 @@ class MyTest(TestCase):
         
     def test_if_redirect_is_working(self):
         form_data ={"course":"MEE322","student":"okhamena azeez","timestamp":"23/01/23"}
-          # Convert timestamp string to datetime object
+        # Convert timestamp string to datetime object
         timestamp = parser.parse(form_data['timestamp'])
         # Convert datetime object to desired format
-        form_data['timestamp'] = timestamp.strftime('%Y-%m-%d')
+        form_data["timestamp"] = timestamp.strftime('%Y-%m-%d')
         form_model=Attendance(**form_data)
         form_model.full_clean()
         form_model.save()
