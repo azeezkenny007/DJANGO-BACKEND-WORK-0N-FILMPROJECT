@@ -205,6 +205,6 @@ class MyTest(TestCase):
         form_model.full_clean()
         form_model.save()
         response = self.client.post("/pages/attend/",data =form_data)
-        self.assertRedirects(response,"/pages/signed/")
+        self.assertRedirects(response,"/pages/signed/",status_code=302)
        
         
