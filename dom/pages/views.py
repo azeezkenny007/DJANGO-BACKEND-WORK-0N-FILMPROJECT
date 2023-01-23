@@ -121,7 +121,7 @@ def addNew(request):
 
 def sign_attendance(request):
     if request.method == 'POST':
-        form = AttendanceForm(request.POST)
+        form = AttendanceForm(request.POST) 
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO,
