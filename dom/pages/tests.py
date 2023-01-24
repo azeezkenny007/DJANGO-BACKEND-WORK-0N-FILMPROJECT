@@ -1,8 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Categorie, User, Group, Film, Season,Contact,MyModel,Attendance
+from .models import Categorie, User, Group, Film, Season, Contact, MyModel, Attendance
 import datetime
 from dateutil import parser
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth.models import User as DjangoUser
+from account.views import view1
 
 # Create your tests here.
 
@@ -14,8 +17,18 @@ class MyTest(TestCase):
         pass
 
     def setUp(self):
-        print("set to run everytime")
-        pass
+       
+        contact = Contact.objects.create(
+            name="okhamena",
+            email="azeezokhamena@gmail.com",
+            message="This user has succesfully logged in the server",
+            created_at="01/24/23"
+            
+        )
+        
+        user = DjangoUser.objects.create_user(
+            username="testuser",password="secretpassword"
+        )
 
     def test_check_If_the_template_is_okay(self):
         self.assertTrue(True)
@@ -133,78 +146,174 @@ class MyTest(TestCase):
         self.assertEqual(category_length, None)
         season_film = season._meta.get_field("film").verbose_name
         season_description = season._meta.get_field("description").verbose_name
-        season_season_number = season._meta.get_field("season_number").verbose_name
-        season_season_number_max_length = season._meta.get_field("season_number").max_length
-        self.assertEqual(season_season_number_max_length,200)
-        self.assertEqual(season_season_number,"season number")
-        self.assertEqual(season_description,"description")
-        self.assertEqual(season_film,"film")
+        season_season_number = season._meta.get_field(
+            "season_number").verbose_name
+        season_season_number_max_length = season._meta.get_field(
+            "season_number").max_length
+        self.assertEqual(season_season_number_max_length, 200)
+        self.assertEqual(season_season_number, "season number")
+        self.assertEqual(season_description, "description")
+        self.assertEqual(season_film, "film")
         self.assertEqual(category, "category")
         self.assertEqual(tags, "tags")
         self.assertEqual(tags_length, 20)
         self.assertEqual(tags_choices, movies_choices)
 
     def test_if_the_model_Attendance_is_working_correctly(self):
-        contactCreate = Contact.objects.create(name="azeez",email="azeezokhamena@gmail.com",message="This form was submitted",created_at="12/12/2021")
+        contactCreate = Contact.objects.create(
+            name="azeez", email="azeezokhamena@gmail.com", message="This form was submitted", created_at="12/12/2021")
         contact = Contact.objects.get(id=1)
         contact_name = contact._meta.get_field("name").verbose_name
         contact_name_max_length = contact._meta.get_field("name").max_length
-        contact_email =contact._meta.get_field("email").verbose_name
+        contact_email = contact._meta.get_field("email").verbose_name
         contact_message = contact._meta.get_field("message").verbose_name
-        contact_creattion_time = contact._meta.get_field("created_at").verbose_name
-        self.assertEqual(contact_name,"name")
-        self.assertEqual(contact_email,"email")
-        self.assertEqual(contact_message,"message")
-        self.assertEqual(contact_creattion_time,"created at")
-        self.assertEqual(contact_name_max_length,255)
-        
-    
+        contact_creattion_time = contact._meta.get_field(
+            "created_at").verbose_name
+        self.assertEqual(contact_name, "name")
+        self.assertEqual(contact_email, "email")
+        self.assertEqual(contact_message, "message")
+        self.assertEqual(contact_creattion_time, "created at")
+        self.assertEqual(contact_name_max_length, 255)
+
     def test_if_field_is_correct(self):
-         contactCreate = Contact.objects.create(name="azeez",email="azeezokhamena@gmail.com",message="This form was submitted",created_at="12/12/2021")
-         contact = Contact.objects.get(id=1)
-         contact_name_charField = contact._meta.get_field("name").get_internal_type()
-         self.assertEqual(contact_name_charField,"CharField")
-         
+        contactCreate = Contact.objects.create(
+            name="azeez", email="azeezokhamena@gmail.com", message="This form was submitted", created_at="12/12/2021")
+        contact = Contact.objects.get(id=1)
+        contact_name_charField = contact._meta.get_field(
+            "name").get_internal_type()
+        self.assertEqual(contact_name_charField, "CharField")
+
     def test_if_values_used_in_contact_model_is_correct(self):
-        contactCreate = Contact.objects.create(name="azeez",email="azeezokhamena@gmail.com",message="This form was submitted",created_at="01/23/23")
-        self.assertEqual(contactCreate.name,"azeez")
-        self.assertEqual(contactCreate.email,"azeezokhamena@gmail.com")
-        self.assertEqual(contactCreate.message,"This form was submitted")
-        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/23/23")
-        
+        contactCreate = Contact.objects.create(
+            name="azeez", email="azeezokhamena@gmail.com", message="This form was submitted", created_at="01/24/23")
+        self.assertEqual(contactCreate.name, "azeez")
+        self.assertEqual(contactCreate.email, "azeezokhamena@gmail.com")
+        self.assertEqual(contactCreate.message, "This form was submitted")
+        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/24/23")
+
     def test_if_values_used_in_model_Mymodel_model_is_correct(self):
-        my_model_create = MyModel.objects.create(name="kenny",description="The man at field",created_at="01/23/23",updated_at="01/23/23")
+        my_model_create = MyModel.objects.create(
+            name="kenny", description="The man at field", created_at="01/24/23", updated_at="01/24/23")
         model = MyModel.objects.get(id=1)
         name_field_name = model._meta.get_field("name").verbose_name
         name_field_length = model._meta.get_field("name").max_length
-        description_field_name = model._meta.get_field("description").verbose_name
-        name_is_CharField=model._meta.get_field("name").get_internal_type()
-        description_is_TextField = model._meta.get_field("description").get_internal_type()
-        created_at_DateTimeField = model._meta.get_field("created_at").get_internal_type()
-        updated_at_DateTimeField =model._meta.get_field("updated_at").get_internal_type()
-        updated_at_auto_add_now=model._meta.get_field("updated_at")
-        self.assertEqual(model.name,"kenny")
-        self.assertEqual(model.description,"The man at field")
-        self.assertEqual(model.created_at.strftime("%x"),"01/23/23")
-        self.assertTrue(model.updated_at.strftime("%x") == "01/23/23")
-        self.assertEqual(description_field_name,"description")
-        self.assertEqual(name_field_length,255)
-        self.assertEqual(name_field_name,"name")
-        self.assertEqual(name_is_CharField,"CharField")
-        self.assertEqual(description_is_TextField,"TextField")
-        self.assertEqual(created_at_DateTimeField,"DateTimeField")
-        self.assertTrue(updated_at_DateTimeField,"DateTimeField")
-        
+        description_field_name = model._meta.get_field(
+            "description").verbose_name
+        name_is_CharField = model._meta.get_field("name").get_internal_type()
+        description_is_TextField = model._meta.get_field(
+            "description").get_internal_type()
+        created_at_DateTimeField = model._meta.get_field(
+            "created_at").get_internal_type()
+        updated_at_DateTimeField = model._meta.get_field(
+            "updated_at").get_internal_type()
+        updated_at_auto_add_now = model._meta.get_field("updated_at")
+        self.assertEqual(model.name, "kenny")
+        self.assertEqual(model.description, "The man at field")
+        self.assertEqual(model.created_at.strftime("%x"), "01/24/23")
+        self.assertTrue(model.updated_at.strftime("%x") == "01/24/23")
+        self.assertEqual(description_field_name, "description")
+        self.assertEqual(name_field_length, 255)
+        self.assertEqual(name_field_name, "name")
+        self.assertEqual(name_is_CharField, "CharField")
+        self.assertEqual(description_is_TextField, "TextField")
+        self.assertEqual(created_at_DateTimeField, "DateTimeField")
+        self.assertTrue(updated_at_DateTimeField, "DateTimeField")
+
     def test_if_redirect_is_working(self):
-        form_data ={"course":"MEE322","student":"okhamena azeez","timestamp":"23/01/23"}
+        form_data = {"course": "MEE322",
+                     "student": "okhamena azeez", "timestamp": "23/01/23"}
         # Convert timestamp string to datetime object
         timestamp = parser.parse(form_data['timestamp'])
         # Convert datetime object to desired format
         form_data["timestamp"] = timestamp.strftime('%Y-%m-%d')
-        form_model=Attendance(**form_data)
+        form_model = Attendance(**form_data)
         form_model.full_clean()
         form_model.save()
-        response = self.client.post("/pages/attend/",data =form_data)
-        self.assertRedirects(response,"/pages/signed/",status_code=302)
-       
+        response = self.client.post("/pages/attend/", data=form_data)
+        self.assertRedirects(response, "/pages/signed/", status_code=302)
+ 
+    def test_if_Mymodel_str_name_is_correct(self):
+        my_model_create = MyModel.objects.create(
+            name="kenny", description="The man at field", created_at="01/24/23", updated_at="01/24/23")
+        model = MyModel.objects.get(id=1)
+        expected_string_value = f"{model.name}"
+        self.assertEqual(str(model), expected_string_value)
+
+    def test_if_httpresponse_contain_the_http_response(self):
+        response = self.client.get("/pages/signed/")
+        self.assertContains(response, "You have been successfully redireceted")
+
+    def test_the_used_for_the_web_browser_is_correct(self):
+        response = self.client.get("/pages/about/")
+        self.assertTemplateUsed(response, "pages/about.html")
+    
+    def test_if_the_get_request_is_correct(self):
+        movies_choices = (('Action', 'Action'), ('Horror', 'horror'),
+                          ('Thriller', 'Thriller'))
+        category = Categorie.objects.create(name="favorite")
+        image = SimpleUploadedFile(
+            name="child.jpg",
+            content=open(
+            "C:\\Users\\DELL 5470\\Desktop\\django templates\\filmproject\\dom\\media\\images\\child.jpg","rb").read(),
+            content_type="image/jpg")
+        main_film = Film.objects.create(
+            category=category,
+            name="season",
+            tags="best selling",
+            image_url=image,
+            R_rating="2.4",
+            Description="The boy that steals from us",
+            is_series=True,
+            movie_rating="Best",
+            running_time="",
+            release_year="2000",
+            country="nigeria",
+            date_created="12/03/2021"
+
+        )
+
+        film = Film.objects.get(id=1)
+        response = self.client.get("/pages/details1/1/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["film"],film)
         
+    # def test_if_test_category_film_test(self):
+    #     category = Categorie.objects.create(name="favorite")
+    #     image = SimpleUploadedFile(
+    #         name="child.jpg",
+    #         content=open(
+    #         "C:\\Users\\DELL 5470\\Desktop\\django templates\\filmproject\\dom\\media\\images\\child.jpg","rb").read(),
+    #         content_type="image/jpg")
+    #     main_film = Film.objects.create(
+    #         category=category,
+    #         name="season",
+    #         tags="best selling",
+    #         image_url=image,
+    #         R_rating="2.4",
+    #         Description="The boy that steals from us",
+    #         is_series=True,
+    #         movie_rating="Best",
+    #         running_time="",
+    #         release_year="2000",
+    #         country="nigeria",
+    #         date_created="12/03/2021"
+
+    #     )
+    #     film = Film.objects.all()
+    #     series = Film.objects.filter(category__name='tvseries')
+    #     movies = Film.objects.filter(category__name='movies')
+    #     cartoons = Film.objects.filter(category__name='cartoons')
+    #     kate = {'film': film, 'cartoons': cartoons,'movies': movies, 'series': series}
+    #     response = self.client.get("/pages/index/")
+    #     self.assertEqual(response.status_code,302)
+    #     self.assertEqual(response.context["kate"],kate)
+    
+    def test_if_post_request_on_view1_is_working(self):
+        response = self.client.post(reverse(view1),{
+            "username":"testuser","password":"secretpassword"
+        })
+        self.assertEqual(response.status_code,302)
+        self.assertRedirects(response,reverse("index"),status_code=302)
+        self.assertTemplate(response,"account/pages")
+        
+    # def test_if_
