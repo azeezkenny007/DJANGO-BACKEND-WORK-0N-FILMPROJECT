@@ -8,6 +8,7 @@ from django.contrib.auth.models import User as DjangoUser
 from account.views import view1, view2
 from account.forms import Contactform
 from django.contrib.auth.forms import  UserCreationForm
+from .forms2 import MyForm
 
 # Create your tests here.
 
@@ -338,4 +339,12 @@ class MyTest(TestCase):
         response = self.client.post(reverse(view2),data=form_data)
         self.assertEqual(response.status_code,200)
         self.assertTemplateUsed(response,"account/signup.html")
+        
+    def test_if_the_form_will_fail_if_incorrect_data_is_sent(self):
+        form =MyForm({"name":""})
+        self.assertFalse(form.is_valid())
+        
+        
+    
+        
     

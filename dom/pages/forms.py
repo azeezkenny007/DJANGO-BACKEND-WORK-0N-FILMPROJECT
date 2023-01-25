@@ -1,5 +1,5 @@
 # forms.py
-from django.forms import ModelForm
+from django.forms import ModelForm,forms as DjangoForm
 from .models import Contact, Attendance,MyModel
 from django.contrib import messages
 from rest_framework.serializers import ModelSerializer
@@ -24,3 +24,6 @@ class MyModelSerializer(ModelSerializer):
     class Meta:
         model = MyModel
         fields = '__all__'
+
+
+
