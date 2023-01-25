@@ -369,3 +369,26 @@ class MyTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["message"],
                          ['Ensure this value has at most 10000 characters (it has 100001).'])
+        
+    def test_if_two_from_form_is_supplied(self):
+        form=MyForm({"message":"This is some text","name":"azeez","email":""})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["email"],["This field is required."])
+        
+    def test_if_two_of_the_data_can_work(self):
+        form =MyForm({"message":"This is some text","name":"azeez"})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["email"],["This field is required."])
+        
+    def test_if_the_data_inputed_is_correct(self):
+        form =MyForm({"message":"This is some text","email":"azeezokhamena@gmail.com","nana":"azeez"})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['name'],["This field is required."])
+        self.assertEqual(form.cleaned_data["message"],"This is some text")
+        # self.assertEqual(form.cleaned_data["nana"],"azeez")
+        self.assertEqual(form.cleaned_data["email"],"azeezokhamena@gmail.com")
+        
+    def test_for_keyError_in_the_data(self):
+        form =MyForm({"message":"This is some text","email":"azeezokhamena@gmail.com","nana":"azeez"})
+        self.assertFalse(form.is_valid())
+        self.assertNotIn("nana",form.cleaned_data)
