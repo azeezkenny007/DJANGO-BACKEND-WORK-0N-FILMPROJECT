@@ -5,7 +5,9 @@ import datetime
 from dateutil import parser
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User as DjangoUser
-from account.views import view1
+from account.views import view1, view2
+from account.forms import Contactform
+from django.contrib.auth.forms import  UserCreationForm
 
 # Create your tests here.
 
@@ -17,17 +19,18 @@ class MyTest(TestCase):
         pass
 
     def setUp(self):
-       
+
         contact = Contact.objects.create(
             name="okhamena",
             email="azeezokhamena@gmail.com",
             message="This user has succesfully logged in the server",
-            created_at="01/24/23"
-            
+            created_at="01/25/23"
+
         )
         
+      
         user = DjangoUser.objects.create_user(
-            username="testuser",password="secretpassword"
+            username="testuser", password="secretpassword",
         )
 
     def test_check_If_the_template_is_okay(self):
@@ -185,15 +188,15 @@ class MyTest(TestCase):
 
     def test_if_values_used_in_contact_model_is_correct(self):
         contactCreate = Contact.objects.create(
-            name="azeez", email="azeezokhamena@gmail.com", message="This form was submitted", created_at="01/24/23")
+            name="azeez", email="azeezokhamena@gmail.com", message="This form was submitted", created_at="01/25/23")
         self.assertEqual(contactCreate.name, "azeez")
         self.assertEqual(contactCreate.email, "azeezokhamena@gmail.com")
         self.assertEqual(contactCreate.message, "This form was submitted")
-        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/24/23")
+        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/25/23")
 
     def test_if_values_used_in_model_Mymodel_model_is_correct(self):
         my_model_create = MyModel.objects.create(
-            name="kenny", description="The man at field", created_at="01/24/23", updated_at="01/24/23")
+            name="kenny", description="The man at field", created_at="01/25/23", updated_at="01/25/23")
         model = MyModel.objects.get(id=1)
         name_field_name = model._meta.get_field("name").verbose_name
         name_field_length = model._meta.get_field("name").max_length
@@ -209,8 +212,8 @@ class MyTest(TestCase):
         updated_at_auto_add_now = model._meta.get_field("updated_at")
         self.assertEqual(model.name, "kenny")
         self.assertEqual(model.description, "The man at field")
-        self.assertEqual(model.created_at.strftime("%x"), "01/24/23")
-        self.assertTrue(model.updated_at.strftime("%x") == "01/24/23")
+        self.assertEqual(model.created_at.strftime("%x"), "01/25/23")
+        self.assertTrue(model.updated_at.strftime("%x") == "01/25/23")
         self.assertEqual(description_field_name, "description")
         self.assertEqual(name_field_length, 255)
         self.assertEqual(name_field_name, "name")
@@ -231,10 +234,10 @@ class MyTest(TestCase):
         form_model.save()
         response = self.client.post("/pages/attend/", data=form_data)
         self.assertRedirects(response, "/pages/signed/", status_code=302)
- 
+
     def test_if_Mymodel_str_name_is_correct(self):
         my_model_create = MyModel.objects.create(
-            name="kenny", description="The man at field", created_at="01/24/23", updated_at="01/24/23")
+            name="kenny", description="The man at field", created_at="01/25/23", updated_at="01/25/23")
         model = MyModel.objects.get(id=1)
         expected_string_value = f"{model.name}"
         self.assertEqual(str(model), expected_string_value)
@@ -246,7 +249,7 @@ class MyTest(TestCase):
     def test_the_used_for_the_web_browser_is_correct(self):
         response = self.client.get("/pages/about/")
         self.assertTemplateUsed(response, "pages/about.html")
-    
+
     def test_if_the_get_request_is_correct(self):
         movies_choices = (('Action', 'Action'), ('Horror', 'horror'),
                           ('Thriller', 'Thriller'))
@@ -254,7 +257,7 @@ class MyTest(TestCase):
         image = SimpleUploadedFile(
             name="child.jpg",
             content=open(
-            "C:\\Users\\DELL 5470\\Desktop\\django templates\\filmproject\\dom\\media\\images\\child.jpg","rb").read(),
+                "C:\\Users\\DELL 5470\\Desktop\\django templates\\filmproject\\dom\\media\\images\\child.jpg", "rb").read(),
             content_type="image/jpg")
         main_film = Film.objects.create(
             category=category,
@@ -275,8 +278,8 @@ class MyTest(TestCase):
         film = Film.objects.get(id=1)
         response = self.client.get("/pages/details1/1/")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context["film"],film)
-        
+        self.assertEqual(response.context["film"], film)
+
     # def test_if_test_category_film_test(self):
     #     category = Categorie.objects.create(name="favorite")
     #     image = SimpleUploadedFile(
@@ -307,13 +310,32 @@ class MyTest(TestCase):
     #     response = self.client.get("/pages/index/")
     #     self.assertEqual(response.status_code,302)
     #     self.assertEqual(response.context["kate"],kate)
-    
+
     def test_if_post_request_on_view1_is_working(self):
-        response = self.client.post(reverse(view1),{
-            "username":"testuser","password":"secretpassword"
+        response = self.client.post(reverse(view1), {
+            "username": "testuser", "password": "secretpassword"
         })
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("index"), status_code=302)
+
+    def test_if_post_request_view2_is_correct(self):
+        form_data = {"username": "okhamena",
+                     "email": "azeezokhamena@gmail.com", 
+                     "password1":"failfault",
+                     "password2":"failfault"
+                     }
+        response = self.client.post(reverse(view2),data=form_data)
         self.assertEqual(response.status_code,302)
-        self.assertRedirects(response,reverse("index"),status_code=302)
-        self.assertTemplate(response,"account/pages")
+        self.assertRedirects(response,reverse(view1))
         
-    # def test_if_
+        
+    def  test_if_post_request_fail_if_an_empty_text_is_sent(self):
+        form_data = {"username": "",
+                     "email": "", 
+                     "password1":"",
+                     "password2":""
+                     }
+        response = self.client.post(reverse(view2),data=form_data)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,"account/signup.html")
+    
