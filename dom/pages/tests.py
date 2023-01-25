@@ -343,6 +343,7 @@ class MyTest(TestCase):
     def test_if_the_form_will_fail_if_incorrect_data_is_sent(self):
         form =MyForm({"name":""})
         self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["name"],['This field is required.'])
         
         
     
