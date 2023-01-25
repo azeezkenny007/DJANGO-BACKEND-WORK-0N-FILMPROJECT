@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User as DjangoUser
 from account.views import view1, view2
 from account.forms import Contactform
-from django.contrib.auth.forms import  UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from .forms2 import MyForm
 
 # Create your tests here.
@@ -28,8 +28,7 @@ class MyTest(TestCase):
             created_at="01/25/23"
 
         )
-        
-      
+
         user = DjangoUser.objects.create_user(
             username="testuser", password="secretpassword",
         )
@@ -321,31 +320,52 @@ class MyTest(TestCase):
 
     def test_if_post_request_view2_is_correct(self):
         form_data = {"username": "okhamena",
-                     "email": "azeezokhamena@gmail.com", 
-                     "password1":"failfault",
-                     "password2":"failfault"
+                     "email": "azeezokhamena@gmail.com",
+                     "password1": "failfault",
+                     "password2": "failfault"
                      }
-        response = self.client.post(reverse(view2),data=form_data)
-        self.assertEqual(response.status_code,302)
-        self.assertRedirects(response,reverse(view1))
-        
-        
-    def  test_if_post_request_fail_if_an_empty_text_is_sent(self):
+        response = self.client.post(reverse(view2), data=form_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse(view1))
+
+    def test_if_post_request_fail_if_an_empty_text_is_sent(self):
         form_data = {"username": "",
-                     "email": "", 
-                     "password1":"",
-                     "password2":""
+                     "email": "",
+                     "password1": "",
+                     "password2": ""
                      }
-        response = self.client.post(reverse(view2),data=form_data)
-        self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response,"account/signup.html")
-        
+        response = self.client.post(reverse(view2), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "account/signup.html")
+
     def test_if_the_form_will_fail_if_incorrect_data_is_sent(self):
-        form =MyForm({"name":""})
+        form = MyForm({"name": ""})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["name"],['This field is required.'])
-        
-        
-    
-        
-    
+        self.assertEqual(form.errors["name"], ['This field is required.'])
+
+    def test_if_the_form_will_fail_if_other_data_are_not_provided(self):
+        form = MyForm({"email": ""})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["email"], ["This field is required."])
+
+    def test_if_the_form_will_fail_if_incorrect_data_is_sent(self):
+        form = MyForm({"name": "a" * 256})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["name"], [
+                         'Ensure this value has at most 255 characters (it has 256).'])
+
+    def test_if_the_form_will_fail_with_only_message_provided(self):
+        form = MyForm({"message": ""})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["message"], ["This field is required."])
+
+    def test_if_the_form_request_will_go(self):
+        form = MyForm({"name": "azeez", "message": "This is the townhall",
+                      "email": "azeezokhamena@gmail.com"})
+        self.assertTrue(form.is_valid())
+
+    def test_to_reject_the_number_words_added_to_the_message_field(self):
+        form = MyForm({"message": "a" * 100001})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors["message"],
+                         ['Ensure this value has at most 10000 characters (it has 100001).'])

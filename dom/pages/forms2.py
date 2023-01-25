@@ -2,7 +2,7 @@ from django import forms
 class MyForm(forms.Form):
     name = forms.CharField(max_length=255)
     email = forms.EmailField()
-    message = forms.Textarea()
+    message = forms.CharField(max_length=10000)
 
     class Meta:
         error_messages = {
