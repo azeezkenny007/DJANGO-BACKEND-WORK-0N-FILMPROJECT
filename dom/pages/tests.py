@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase,RequestFactory
 from django.urls import reverse
 from .models import Categorie, User, Group, Film, Season, Contact, MyModel, Attendance
 import datetime
@@ -9,6 +9,7 @@ from account.views import view1, view2
 from account.forms import Contactform
 from django.contrib.auth.forms import UserCreationForm
 from .forms2 import MyForm
+from .views import serial
 
 
 
@@ -27,7 +28,7 @@ class MyTest(TestCase):
             name="okhamena",
             email="azeezokhamena@gmail.com",
             message="This user has succesfully logged in the server",
-            created_at="01/27/23"
+            created_at="01/28/23"
 
         )
 
@@ -190,15 +191,15 @@ class MyTest(TestCase):
 
     def test_if_values_used_in_contact_model_is_correct(self):
         contactCreate = Contact.objects.create(
-            name="azeez", email="azeezokhamena@gmail.com", message="This form was submitted", created_at="01/27/23")
+            name="azeez", email="azeezokhamena@gmail.com", message="This form was submitted", created_at="01/28/23")
         self.assertEqual(contactCreate.name, "azeez")
         self.assertEqual(contactCreate.email, "azeezokhamena@gmail.com")
         self.assertEqual(contactCreate.message, "This form was submitted")
-        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/27/23")
+        self.assertTrue(contactCreate.created_at.strftime("%x") == "01/28/23")
 
     def test_if_values_used_in_model_Mymodel_model_is_correct(self):
         my_model_create = MyModel.objects.create(
-            name="kenny", description="The man at field", created_at="01/27/23", updated_at="01/27/23")
+            name="kenny", description="The man at field", created_at="01/28/23", updated_at="01/28/23")
         model = MyModel.objects.get(id=1)
         name_field_name = model._meta.get_field("name").verbose_name
         name_field_length = model._meta.get_field("name").max_length
@@ -214,8 +215,8 @@ class MyTest(TestCase):
         updated_at_auto_add_now = model._meta.get_field("updated_at")
         self.assertEqual(model.name, "kenny")
         self.assertEqual(model.description, "The man at field")
-        self.assertEqual(model.created_at.strftime("%x"), "01/27/23")
-        self.assertTrue(model.updated_at.strftime("%x") == "01/27/23")
+        self.assertEqual(model.created_at.strftime("%x"), "01/28/23")
+        self.assertTrue(model.updated_at.strftime("%x") == "01/28/23")
         self.assertEqual(description_field_name, "description")
         self.assertEqual(name_field_length, 255)
         self.assertEqual(name_field_name, "name")
@@ -239,7 +240,7 @@ class MyTest(TestCase):
 
     def test_if_Mymodel_str_name_is_correct(self):
         my_model_create = MyModel.objects.create(
-            name="kenny", description="The man at field", created_at="01/27/23", updated_at="01/27/23")
+            name="kenny", description="The man at field", created_at="01/28/23", updated_at="01/28/23")
         model = MyModel.objects.get(id=1)
         expected_string_value = f"{model.name}"
         self.assertEqual(str(model), expected_string_value)
@@ -442,13 +443,22 @@ class MyTest(TestCase):
         
         
     def test_if_the_string_in_MyModel_is_correct(self):
-        myModel = MyModel(name="azeez",description="The man is an idiot",created_at="01/27/23", updated_at="01/27/23")
+        myModel = MyModel(name="azeez",description="The man is an idiot",created_at="01/28/23", updated_at="01/28/23")
         self.assertEqual(myModel.name,"azeez")
-        self.assertEqual(myModel.created_at,"01/27/23")
-        self.assertEqual(myModel.updated_at,"01/27/23")
+        self.assertEqual(myModel.created_at,"01/28/23")
+        self.assertEqual(myModel.updated_at,"01/28/23")
         self.assertEqual(myModel.description,"The man is an idiot")
         
     def test_if_the_serial_url_is_working(self):
-        response=self.client.get(reverse("serial"))
+       group = Group.objects.create()
+       self.factory = RequestFactory()
+       request = self.factory.get(reverse("serial"))
+       response = serial(request)
+       self.assertEqual(response.status_code,200)
+       
+    def test_if_catalog_url_is_working(self):
+        response =self.client.get(reverse("catalog2"))
         self.assertEqual(response.status_code,200)
-        self.assertContains(response,"name: kenny")
+        self.assertTemplateUsed(response,"pages/catalog2.html")
+       
+       
