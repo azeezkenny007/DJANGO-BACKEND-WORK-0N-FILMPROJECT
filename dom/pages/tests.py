@@ -460,5 +460,12 @@ class MyTest(TestCase):
         response =self.client.get(reverse("catalog2"))
         self.assertEqual(response.status_code,200)
         self.assertTemplateUsed(response,"pages/catalog2.html")
+        
+    def test_if_about_url_is_working(self):
+        response = self.client.get(reverse("about"))
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,"pages/about.html")
+        
+    def 
        
        
