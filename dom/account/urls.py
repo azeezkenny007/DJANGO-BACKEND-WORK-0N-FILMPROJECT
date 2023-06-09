@@ -22,6 +22,7 @@ urlpatterns = [
     path('signin/',view1,name='signin'),
     path('signup/',view2,name='signup'),
     path('logout/',man,name='logout'),
-    path('cookie/',test_cookie,name='cookie')
+    path('cookie/',test_cookie,name='cookie'),
+    path('send/',send_home,name='sendemail')
     
 ]

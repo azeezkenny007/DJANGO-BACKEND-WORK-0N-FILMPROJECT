@@ -5,6 +5,8 @@ from django.shortcuts import render,redirect
 from pages.views import * 
 from .forms import *
 from django.contrib.auth import authenticate,login,logout
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
 # Create your views here.
 def view1(request):
     if request.method=='POST':
@@ -51,3 +53,22 @@ def test_cookie(request):
         return response
     else:
         return HttpResponse("Your favorite color is {0}".format(request.COOKIES['color']))
+
+
+def send_email_to_client():
+    subject = 'Welcome to our website'
+    message = 'Hope you are enjoying your stay'
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = ['kennyokhamena@gmail.com',]
+    send_email(subject, message, from_email, recipient_list)
+    
+def send_email_attachment(subject,  message, from_email, recipient_list, attachment):
+    mail =EmailMessage( subject=subject, body=message, from_email=from_email, to=recipient_list)
+    mail.send()
+    
+def send_home(request):
+    subject = 'Welcome to our website'
+    message = 'Hope you are enjoying your stay'
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = ['kennyokhamena@gmail.com',]
+    send_email_attachment(subject=subject, message=message, from_email=from_email, recipient_list=recipient_list, attachment='static/images/1.jpg')

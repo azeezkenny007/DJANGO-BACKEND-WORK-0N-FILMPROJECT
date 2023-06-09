@@ -23,4 +23,6 @@ class VoteView(APIView):
             return Response({"message": "No name was provided"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
    

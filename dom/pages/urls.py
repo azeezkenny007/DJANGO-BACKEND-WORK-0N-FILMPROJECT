@@ -33,4 +33,5 @@ path('http/',addNew,name='http'),
 path('attend/',sign_attendance,name='attend'),
 path('signed/',attendance_signed,name='signed'),
 path('serial/',serial,name='serial'),
+path('email/',send_email,name='email'),
 ]

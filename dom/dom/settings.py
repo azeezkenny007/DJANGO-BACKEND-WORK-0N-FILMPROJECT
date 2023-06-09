@@ -138,3 +138,16 @@ MEDIA_ROUTE=os.path.join(BASE_DIR,'media/images')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# settings.py
+
+# SMTP Email Backend Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # e.g., 'smtp.gmail.com'
+EMAIL_PORT = 587  # the port number for your SMTP server
+EMAIL_HOST_USER = 'azeezokhamena@gmail.com'  # your email address
+EMAIL_HOST_PASSWORD = 'oneaccount1'  # your email password
+EMAIL_USE_TLS = True  # use TLS encryption for secure connection
+# DEFAULT_FROM_EMAIL = 'kennyokhamena@gmail.com'  # the default "from" address for sent emails
+

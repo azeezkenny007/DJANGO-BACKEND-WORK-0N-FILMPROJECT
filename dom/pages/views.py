@@ -1,35 +1,37 @@
-
 from django.shortcuts import render, redirect
 from .forms import AttendanceForm
 from django.shortcuts import render
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.db.models import F, Q
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 from .decorators import *
+from django.conf import settings
 from .models import *
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core import serializers
+from django.core.mail import EmailMessage
 
 # Create your views here.
 
 
 def error(request):
-    return render(request, 'pages/404.html')
+    return render(request, "pages/404.html")
 
 
 def about(request):
-    return render(request, 'pages/about.html')
+    return render(request, "pages/about.html")
 
 
 def catalog1(request):
     film = Film.objects.all()
-    cartoons = Film.objects.filter(category__name='cartoons')
-    movies = Film.objects.filter(category__name='movies')
+    cartoons = Film.objects.filter(category__name="cartoons")
+    movies = Film.objects.filter(category__name="movies")
 
     p = Paginator(film, 2)
-    page_num = request.GET.get('page')
+    page_num = request.GET.get("page")
 
     try:
         page = p.page(page_num)
@@ -40,17 +42,17 @@ def catalog1(request):
     except EmptyPage:
         page = p.page(1)
 
-    kate = {'film': page, 'cartoons': cartoons, 'movies': movies}
-    return render(request, 'pages/catalog1.html', kate)
+    kate = {"film": page, "cartoons": cartoons, "movies": movies}
+    return render(request, "pages/catalog1.html", kate)
 
 
 def catalog2(request):
-    return render(request, 'pages/catalog2.html')
+    return render(request, "pages/catalog2.html")
 
 
 def details1(request, id):
     film = Film.objects.get(id=id)
-    return render(request, 'pages/details1.html', {'film': film})
+    return render(request, "pages/details1.html", {"film": film})
 
 
 def details2(request, id):
@@ -66,34 +68,37 @@ def details2(request, id):
     print(allseasons)
     print(seasons, "❗❗")
 
-    return render(request, 'pages/details2.html', {'series': series, 'episode': episode, "you": allseasons})
+    return render(
+        request,
+        "pages/details2.html",
+        {"series": series, "episode": episode, "you": allseasons},
+    )
 
 
 def faq(request):
-    return render(request, 'pages/faq.html')
+    return render(request, "pages/faq.html")
 
 
-@ custom_login_required
+@custom_login_required
 def index(request):
     film = Film.objects.all()
-    cartoons = Film.objects.filter(category__name='cartoons')
+    cartoons = Film.objects.filter(category__name="cartoons")
 
-    series = Film.objects.filter(category__name='tvseries')
+    series = Film.objects.filter(category__name="tvseries")
 
-    movies = Film.objects.filter(category__name='movies')
+    movies = Film.objects.filter(category__name="movies")
 
-    kate = {'film': film, 'cartoons': cartoons,
-            'movies': movies, 'series': series}
+    kate = {"film": film, "cartoons": cartoons, "movies": movies, "series": series}
 
-    return render(request, 'pages/index.html', context=kate)
+    return render(request, "pages/index.html", context=kate)
 
 
 def index2(request):
-    return render(request, 'pages/index2.html')
+    return render(request, "pages/index2.html")
 
 
 def pricing(request):
-    return render(request, 'pages/pricing.html')
+    return render(request, "pages/pricing.html")
 
 
 def new(request):
@@ -109,28 +114,28 @@ def addNew(request):
     first = User.objects.first()
     # get the query set that name field contains kenny OR lade
     #       1. the querysearch is case - insensitive
-    fade = Group.objects.filter(
-        Q(name__icontains="kenny") & Q(name__icontains="lade"))
+    fade = Group.objects.filter(Q(name__icontains="kenny") & Q(name__icontains="lade"))
     print(user, "🎛")
     print(group, "🐛")
     print(make, "👩‍🍳")
-    print(fade, '🐵')
-    print(first, '💫')
+    print(fade, "🐵")
+    print(first, "💫")
     return HttpResponse("<strong>hello world everyone</strong>")
 
 
 def sign_attendance(request):
-    if request.method == 'POST':
-        form = AttendanceForm(request.POST) 
+    if request.method == "POST":
+        form = AttendanceForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.add_message(request, messages.INFO,
-                                 "your registration was successful!!!")
+            messages.add_message(
+                request, messages.INFO, "your registration was successful!!!"
+            )
             return redirect(attendance_signed)
 
     else:
         form = AttendanceForm()
-    return render(request, 'pages/attendance.html', {'form': form})
+    return render(request, "pages/attendance.html", {"form": form})
 
 
 def attendance_signed(request):
@@ -138,13 +143,28 @@ def attendance_signed(request):
 
 
 def serial(request):
-    group =Group.objects.all()
-    data  = serializers.serialize("json",group)
-    print(data,"👼🏿")
+    group = Group.objects.all()
+    data = serializers.serialize("json", group)
+    print(data, "👼🏿")
     # return HttpResponse("<bold>You have been successfully redireceted</bold>")
-    return JsonResponse(data,safe=False)
+    return JsonResponse(data, safe=False)
 
 
+def send_email(request):
+    if request.method =="POST":
+        name = request.POST.get("name")
+        sender_email = request.POST.get("email")
+        msg = request.POST.get("message")
+        
+        email = EmailMessage(   
+                             "Test Email",
+                               f" Hi {name} \n Thanks for contacting us\n {msg} \n",
+                               settings.EMAIL_HOST_USER,
+                               [sender_email],
+                     
+                               )
+        
+        email.fail_silently = True
+        email.send()
 
-
-
+    return render(request, "pages/email.html")
