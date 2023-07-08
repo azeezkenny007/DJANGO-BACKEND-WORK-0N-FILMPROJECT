@@ -104,6 +104,9 @@ class TodoGetPutDelete(generics.RetrieveUpdateDestroyAPIView):
 def chat_room(request, room_id):
     room = Room.objects.get(id=room_id)
     messages = room.messages.all()
+    message_content = []
     for message in messages:
+        message_content.append(message.content)
         print(message.content)
-        return HttpResponse(messages.content)
+    
+    return HttpResponse(message_content)
