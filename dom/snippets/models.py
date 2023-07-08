@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 from pygments.lexers import get_all_lexers
@@ -30,6 +32,27 @@ class Snippet(models.Model):
         
     def __str__(self):
       return self.title
+  
+
+
+class Room(models.Model):
+    name = models.CharField(max_length=100)
+    members = models.ManyToManyField(User, related_name='rooms')
+
+    def __str__(self):
+        return self.name
+
+
+class Message(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Message in {self.room} by {self.sender}'
+
+
 
 
 
