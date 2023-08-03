@@ -466,6 +466,6 @@ class MyTest(TestCase):
         self.assertEqual(response.status_code,200)
         self.assertTemplateUsed(response,"pages/about.html")
         
-    def 
+
        
        
